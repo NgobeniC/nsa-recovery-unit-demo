@@ -5,13 +5,13 @@ const vehicleData = {
   lastCheckin: "2025-07-20 12:00 PM", // Matches current date
   battery: "85%", // Reflects NSA RU’s 24-month battery life
   status: "Sleep",
-  lastLocation: { lat: 40.7128, lon: -74.0060 } // New York City
+  lastLocation: { lat: -26.2041, lon: 28.0473 } 
 };
 
 // Mock log entries 
 const logEntries = [
-  { timestamp: "2025-07-20 11:55 AM", lat: 40.7128, lon: -74.0060 },
-  { timestamp: "2025-07-20 12:00 PM", lat: 40.7130, lon: -74.0058 }
+  { timestamp: "2025-07-20 11:55 AM", lat: -26.2041, lon: 28.0473},
+  { timestamp: "2025-07-20 12:00 PM", lat: -26.2043, lon: 28.0471 }
 ];
 
 // Generate random GPS coordinates (near Johannesburg for demo)
