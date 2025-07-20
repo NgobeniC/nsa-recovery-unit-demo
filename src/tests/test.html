@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NSA RU Demo - Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #login-screen, #dashboard { padding: 20px; }
+    #login-screen { border: 1px solid #ccc; }
+    #dashboard { display: none; border: 1px solid #ccc; }
+    #map-container { height: 200px; border: 1px solid #000; margin: 10px 0; }
+    #log { max-height: 200px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; }
+    .active { background-color: #4CAF50; color: white; }
+    button { padding: 10px; margin: 5px; }
+    select, input { padding: 5px; margin: 5px; }
+  </style>
+</head>
+<body>
+  <div id="login-screen">
+    <h2>Login</h2>
+    <input id="username" type="text" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button id="login-btn">Login</button>
+  </div>
+  <div id="dashboard">
+    <h2>NSA Recovery Unit Dashboard</h2>
+    <div id="status">Initializing...</div>
+    <div id="vehicle-id">Car ABC123</div>
+    <div id="recovery-status">Sector: Private, Battery: 85%, Last Check-in: 2025-07-20 12:00 PM</div>
+    <select id="sector"></select>
+    <button id="sleep-btn">Sleep Mode</button>
+    <button id="track-btn">Track Mode</button>
+    <button id="low-signal-btn">Simulate Low Signal</button>
+    <button id="reconnect-btn" disabled>Simulate Reconnect</button>
+    <div id="map-container">Map Placeholder</div>
+    <div id="log"></div>
+  </div>
+  <script type="module" src="../js/main.js"></script>
+</body>
+</html>
