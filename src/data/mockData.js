@@ -5,7 +5,7 @@ const vehicleData = {
   lastCheckin: "2025-07-20 12:00 PM", // Matches current date
   battery: "85%", // Reflects NSA RU’s 24-month battery life
   status: "Sleep",
-  lastLocation: { lat: -26.2041, lon: 28.0473 } 
+  lastLocation: { lat: 40.7128, lon: -74.0060 } // New York City
 };
 
 // Mock log entries 
