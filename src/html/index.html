@@ -17,6 +17,7 @@
            <button type="submit" id="login-btn">Login</button>
          </form>
          <div id="login-message"></div>
+         <div id="security-indicator" style="text-align: center; margin-top: 10px;"></div>
        </div>
        <div id="dashboard" style="display: none;">
          <div id="map-container" style="height: 400px; width: 100%; margin: 20px 0;"></div>
@@ -43,12 +44,15 @@
            const dashboard = document.getElementById('dashboard');
            const loginMessage = document.getElementById('login-message');
            const userRole = document.getElementById('user-role');
+           const securityIndicator = document.getElementById('security-indicator');
 
            // Check session on load
            if (getSession()) {
              loginScreen.style.display = 'none';
              dashboard.style.display = 'block';
              userRole.textContent = `Role: ${getSession().role}`;
+             securityIndicator.textContent = 'Secure Session Active';
+             securityIndicator.style.color = 'green';
              initDashboard();
            }
 
@@ -62,8 +66,13 @@
                loginScreen.style.display = 'none';
                dashboard.style.display = 'block';
                userRole.textContent = `Role: ${result.role}`;
+               securityIndicator.textContent = 'Secure Session Active';
+               securityIndicator.style.color = 'green';
                initDashboard();
-             }
+             } else {
+               securityIndicator.textContent = 'Login Failed';
+               securityIndicator.style.color = 'red';
+              }
            });
 
            document.getElementById('logout-btn').addEventListener('click', () => {
@@ -72,26 +81,37 @@
              dashboard.style.display = 'none';
              userRole.textContent = '';
              loginMessage.textContent = 'Logged out successfully';
+             securityIndicator.textContent = 'No Active Session';
+             securityIndicator.style.color = 'orange'
            });
 
-           function initDashboard() {
-             const map = L.map('map-container').setView([vehicleData.lastLocation.lat, vehicleData.lastLocation.lon], 13);
-             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-               attribution: '© OpenStreetMap'
-             }).addTo(map);
-             L.marker([vehicleData.lastLocation.lat, vehicleData.lastLocation.lon]).addTo(map)
-               .bindPopup('Initial Location').openPopup();
-             document.getElementById('update-btn').addEventListener('click', () => updateMap(map));
-             document.getElementById('sleep-btn').addEventListener('click', () => {
-               document.getElementById('status').textContent = 'Sleep';
-             });
-             document.getElementById('track-btn').addEventListener('click', () => {
-               document.getElementById('status').textContent = 'Track';
-               updateMap(map);
-             });
-             setInterval(toggleSignal, 10000);
-           }
-         });
+             function initDashboard() {
+      console.log('Init dashboard, session:', getSession());
+      if (!getSession()) {
+        loginScreen.style.display = 'block';
+        dashboard.style.display = 'none';
+        return; // Exit if no session
+      }
+      const map = L.map('map-container').setView([vehicleData.lastLocation.lat, vehicleData.lastLocation.lon], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+      }).addTo(map);
+      L.marker([vehicleData.lastLocation.lat, vehicleData.lastLocation.lon]).addTo(map)
+        .bindPopup('Initial Location').openPopup();
+      document.getElementById('update-btn').addEventListener('click', () => updateMap(map));
+      document.getElementById('sleep-btn').addEventListener('click', () => {
+        document.getElementById('status').textContent = 'Sleep';
+      });
+      document.getElementById('track-btn').addEventListener('click', () => {
+        document.getElementById('status').textContent = 'Track';
+        updateMap(map);
+      });
+      setInterval(toggleSignal, 10000);
+      // Update signal status display
+      document.getElementById('signal-status').textContent = `Signal: ${signalStatus}`;
+    }
+  });
+
 
   </script>
 
@@ -100,4 +120,4 @@
   <script type="module" src="../js/main.js"></script>
 </body>
 </html>
-</html>
+
