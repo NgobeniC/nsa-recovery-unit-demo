@@ -6,8 +6,15 @@
     "start": "http-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["tracking", "NSA", "recovery"],
+  "keywords": [
+    "tracking",
+    "NSA",
+    "recovery"
+  ],
   "author": "Charles Ngobeni",
   "license": "ISC",
-  "description": "Demo for NSA Recovery Unit tracking system"
+  "description": "Demo for NSA Recovery Unit tracking system",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
 }
