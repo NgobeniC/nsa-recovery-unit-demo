@@ -1,29 +1,30 @@
-function simulateLogin(username, password) {
-  if (username && password) {
-    console.log("Login successful, redirecting to dashboard...");
-    return true;
-  } else {
-    console.log("Invalid credentials");
-    return false;
-  }
-}
+  import { validateUser, hashPassword } from '../data/mockData.js';
 
-function initializeLogin() {
-  const loginButton = document.getElementById('login-btn');
-  if (loginButton) {
-    loginButton.addEventListener('click', () => {
-      const username = document.getElementById('username')?.value;
-      const password = document.getElementById('password')?.value;
-      if (simulateLogin(username, password)) {
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-      } else {
-        alert("Please enter username and password");
-      }
-    });
-  } else {
-    console.error("Login button not found");
-  }
-}
-b
-export { simulateLogin, initializeLogin };
+     // Simulate session storage with timestamp
+     let currentSession = null;
+
+     function getSession() {
+       if (currentSession && (Date.now() - currentSession.timestamp) < 24 * 60 * 60 * 1000) { // 24-hour session
+         return currentSession;
+       }
+       currentSession = null;
+       return null;
+     }
+
+     function validateLogin(username, password) {
+       if (!username || !password || username.length < 4 || password.length < 8) {
+         return { success: false, message: 'Username must be 4+ chars, password 8+ chars' };
+       }
+       const user = validateUser(username, hashPassword(password));
+       if (user) {
+         currentSession = { username: user.username, role: user.role, timestamp: Date.now() };
+         return { success: true, message: `Login successful as ${user.role}, redirecting...`, role: user.role };
+       }
+       return { success: false, message: 'Invalid username or password' };
+     }
+
+     function logout() {
+       currentSession = null;
+     }
+
+     export { validateLogin, logout, getSession };
