@@ -3,10 +3,10 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 20px;
-  background: #f5f6f9;
-  color: #333;
+  background: #4a4a55;
+  /* color: #fff; */
+  text-align: center;
 }
-
 h2 {
   text-align: center;
 }
@@ -15,9 +15,9 @@ h2 {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background: white;
+  background: gray;
   border-radius: 10px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  box-shadow: 0 0 8px darkblue;
 }
 
 .hidden {
@@ -31,7 +31,7 @@ input, select, button {
   padding: 12px;
   font-size: 16px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #131212;
 }
 
 button {
@@ -42,7 +42,7 @@ button {
 }
 
 button:hover {
-  background: #1d39c4;
+  background: #100b55;
 }
 
 .info-cards {
@@ -109,4 +109,19 @@ button:hover {
 #map-container img {
   width: 100%;
   display: block;
+}
+
+
+button {
+  background-color: #db5010;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
 }
