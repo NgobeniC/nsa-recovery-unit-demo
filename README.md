@@ -103,6 +103,29 @@ Mock Data
 - Example vehicle: `{ vehicleId: "ABC123", sector: "Private", lastLocation: { lat: 40.7128, lon: -74.0060 } }`
 - Sectors: Private, Rental, Courier, Construction, Agriculture, Transit.
 
+New Updates
+1. Features:
+   - Added details for enhanced login (custom credentials), real-time map (50km Johannesburg radius), log export, signal toggling, and mode-specific updates.
+   - Included low-signal simulation and sector support based on the original README.
+
+2. Setup:
+   - Clarified access points for both `test.html` (Charles’s logic) and `index.html` (Clodate’s UI).
+   - Updated to reflect `npm install` for dependencies.
+
+3. DOM Element IDs:
+   - Updated `map-container` to specify Leaflet.js dynamic updates.
+   - Renamed `log` to align with the current `#battery-log` ID from your updates, ensuring consistency.
+   - Kept all original IDs, adding notes for scrollable `log` and button states.
+
+4. Integration Notes:
+   - Emphasized the unique green/gray theme for Clodate’s styling.
+   - Reinforced coordination with Charles for map and DOM compatibility.
+
+5. Mock Data:
+   - Adjusted `lastLocation` to match Johannesburg coordinates (-26.2041, 28.0473) from your updates.
+   - Kept battery as a string ("85%") per original spec.
+
+
 
 Testing
 - Charles’s `test.html` will demonstrate all functionality: login, Sleep Mode (5-second check-ins), Track Mode (2-second updates), low-signal storage, reconnect uploads, sector changes.
