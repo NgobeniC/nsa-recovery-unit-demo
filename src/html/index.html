@@ -1,78 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NSA Recovery Unit Demo</title>
-  <link rel="stylesheet" href="../css/styles.css">
-  <link rel="icon" href="/src/html/images/Track.png" type="image/png">
+  <!DOCTYPE html>
+     <html lang="en">
+     <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>NSA Recovery Unit Demo</title>
+       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+       <link rel="stylesheet" href="../css/styles.css">
+       <link rel="icon" href="/src/html/favicon.png" type="image/png">
+     </head>
+     <body>
+       <div id="login-screen">
+         <h1>NSA Recovery Unit</h1>
+         <form id="login-form">
+           <input type="text" id="username" placeholder="Username" required>
+           <input type="password" id="password" placeholder="Password" required>
+           <button type="submit" id="login-btn">Login</button>
+         </form>
+         <div id="login-message"></div>
+       </div>
+       <div id="dashboard" style="display: none;">
+         <div id="map-container" style="height: 400px; width: 100%; margin: 20px 0;"></div>
+         <div id="signal-status">Signal: Strong</div>
+         <div>
+           <button id="update-btn">Update Location</button>
+           <button id="sleep-btn">Sleep Mode</button>
+           <button id="track-btn">Track Mode</button>
+           <button id="logout-btn">Logout</button>
+         </div>
+         <div id="status">Sleep</div>
+         <div id="user-role"></div>
+         <div id="battery-log" style="max-height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; margin-top: 10px;"></div>
+       </div>
+       <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+       <script type="module">
+         import { updateMap, vehicleData } from '../js/gps.js';
+         import { toggleSignal, signalStatus } from '../js/signal.js';
+         import { validateLogin, logout, getSession } from '../js/login.js';
 
-</head>
-<body>
+         document.addEventListener('DOMContentLoaded', () => {
+           const loginForm = document.getElementById('login-form');
+           const loginScreen = document.getElementById('login-screen');
+           const dashboard = document.getElementById('dashboard');
+           const loginMessage = document.getElementById('login-message');
+           const userRole = document.getElementById('user-role');
 
-</body>
-</html>
-  <header>
-    <h1>NSA Recovery Unit Demo</h1>
+           // Check session on load
+           if (getSession()) {
+             loginScreen.style.display = 'none';
+             dashboard.style.display = 'block';
+             userRole.textContent = `Role: ${getSession().role}`;
+             initDashboard();
+           }
 
-  <!-- Login Screen -->
-  <div id="login-screen" class="screen">
-    <h2>NSA Recovery Unit – Login</h2>
-    <input type="text" id="username" placeholder="Username" />
-    <input type="password" id="password" placeholder="Password" />
-    <button id="login-btn">Login</button>
-  </div>
+           loginForm.addEventListener('submit', (e) => {
+             e.preventDefault();
+             const username = document.getElementById('username').value;
+             const password = document.getElementById('password').value;
+             const result = validateLogin(username, password);
+             loginMessage.textContent = result.message;
+             if (result.success) {
+               loginScreen.style.display = 'none';
+               dashboard.style.display = 'block';
+               userRole.textContent = `Role: ${result.role}`;
+               initDashboard();
+             }
+           });
 
-  <!-- Dashboard -->
-  <div id="dashboard" class="screen hidden">
-    <h2>NSA Recovery Dashboard</h2>
-    
-    <div class="info-cards">
-      <div class="card">
-        <strong>Vehicle ID:</strong>
-        <span id="vehicle-id">NSA-2031</span>
-      </div>
-      <div class="card">
-        <strong>Status:</strong>
-        <span id="status">Inactive</span>
-      </div>
-      <div class="card">
-        <strong>Recovery:</strong>
-        <span id="recovery-status">None</span>
-      </div>
-    </div>
+           document.getElementById('logout-btn').addEventListener('click', () => {
+             logout();
+             loginScreen.style.display = 'block';
+             dashboard.style.display = 'none';
+             userRole.textContent = '';
+             loginMessage.textContent = 'Logged out successfully';
+           });
 
-    <div class="controls">
-      <select id="sector">
-        <option value="north">Sector North</option>
-        <option value="south">Sector South</option>
-        <option value="east">Sector East</option>
-        <option value="west">Sector West</option>
-      </select>
+           function initDashboard() {
+             const map = L.map('map-container').setView([vehicleData.lastLocation.lat, vehicleData.lastLocation.lon], 13);
+             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+               attribution: '© OpenStreetMap'
+             }).addTo(map);
+             L.marker([vehicleData.lastLocation.lat, vehicleData.lastLocation.lon]).addTo(map)
+               .bindPopup('Initial Location').openPopup();
+             document.getElementById('update-btn').addEventListener('click', () => updateMap(map));
+             document.getElementById('sleep-btn').addEventListener('click', () => {
+               document.getElementById('status').textContent = 'Sleep';
+             });
+             document.getElementById('track-btn').addEventListener('click', () => {
+               document.getElementById('status').textContent = 'Track';
+               updateMap(map);
+             });
+             setInterval(toggleSignal, 10000);
+           }
+         });
 
-      <button id="sleep-btn">Sleep Mode</button>
-      <button id="track-btn">Track Mode</button>
-    </div>
-
-    <div id="map-container">
-  <img src="images/map-placeholder.jpg" alt="Map View" />
-</div>
-    
-
-    <div id="log">
-      <h3>Activity Log</h3>
-      <ul>
-        <li>System started...</li>
-      </ul>
-    </div>
-  </div>
-
-  <script>
-    // Basic login toggle for demo purposes
-    document.getElementById("login-btn").addEventListener("click", () => {
-      document.getElementById("login-screen").classList.add("hidden");
-      document.getElementById("dashboard").classList.remove("hidden");
-    });
   </script>
 
 
