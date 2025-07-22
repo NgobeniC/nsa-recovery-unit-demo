@@ -6,11 +6,9 @@
   "scripts": {
     "start": "http-server"
   },
-  "keywords": ["tracking", "NSA", "recovery"],
-  "author": "Charles Ngobeni",
-  "license": "ISC",
-   "devDependencies": {
-         "http-server": "^14.1.1"
+  "author": "Charles Nyabeni",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
   }
-  
 }
