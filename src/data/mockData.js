@@ -1,35 +1,28 @@
-// Mock vehicle data 
-const vehicleData = {
-  vehicleId: "ABC123",
-  sector: "Private",
-  lastCheckin: "2025-07-20 12:00 PM", // Matches current date
-  battery: "85%", // Reflects NSA RU’s 24-month battery life
-  status: "Sleep",
-  lastLocation: { lat: 40.7128, lon: -74.0060 } // New York City
-};
+import CryptoJS from 'crypto-js';
 
-// Mock log entries 
-const logEntries = [
-  { timestamp: "2025-07-20 11:55 AM", lat: -26.2041, lon: 28.0473},
-  { timestamp: "2025-07-20 12:00 PM", lat: -26.2043, lon: 28.0471 }
-];
+     const users = [
+       { username: 'charlesn', passwordHash: CryptoJS.SHA256('SecurePass2025').toString(), role: 'user' },
+       { username: 'clodate', passwordHash: CryptoJS.SHA256('Design123!').toString(), role: 'admin' }
+     ];
 
-// Generate random GPS coordinates (near Johannesburg for demo)
-function generateRandomCoordinates() {
-  const lat = (-26.2 - Math.random() * 0.1).toFixed(4); // Range: -26.2 to -26.3
-  const lon = (28.0 + Math.random() * 0.1).toFixed(4); // Range: 28.0 to 28.1
-  return { lat, lon, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Africa/Johannesburg' }) };
+     function hashPassword(password) {
+       return CryptoJS.SHA256(password).toString();
+     }
 
-}
+     function validateUser(username, passwordHash) {
+       return users.find(u => u.username === username && u.passwordHash === passwordHash);
+     }
 
-// Sector-specific assets (NSA RU’s use cases)
-const sectorVehicles = {
-  Private: "Car ABC123",
-  Rental: "Rental Car DEF456",
-  Courier: "Delivery Truck GHI789",
-  Construction: "Bulldozer XYZ789",
-  Agriculture: "Tractor JKL012",
-  Transit: "Bus MNO345"
-};
-
-export { vehicleData, logEntries, generateRandomCoordinates, sectorVehicles };
+     export const vehicleData = { id: "Car ABC123", battery: 85, lastLocation: { lat: -26.2041, lon: 28.0473 } };
+     export const logEntries = [];
+     export function generateRealisticCoordinates() {
+       const baseLat = vehicleData.lastLocation.lat;
+       const baseLon = vehicleData.lastLocation.lon;
+       const offset = (Math.random() - 0.5) * 0.05; // Approx 5km variation
+       return {
+         lat: baseLat + offset,
+         lon: baseLon + offset,
+         timestamp: new Date().toLocaleString()
+       };
+     }
+     export { hashPassword, validateUser };
