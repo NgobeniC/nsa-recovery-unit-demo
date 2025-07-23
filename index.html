@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NSA Recovery Unit UI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Login Screen -->
+  <div id="login-screen" class="screen">
+    <h2>NSA Recovery Unit – Login</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button id="login-btn">Login</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="screen hidden">
+    <h2>NSA Recovery Dashboard</h2>
+    
+    <div class="info-cards">
+      <div class="card">
+        <strong>Vehicle ID:</strong>
+        <span id="vehicle-id">NSA-2031</span>
+      </div>
+      <div class="card">
+        <strong>Status:</strong>
+        <span id="status">Inactive</span>
+      </div>
+      <div class="card">
+        <strong>Recovery:</strong>
+        <span id="recovery-status">None</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <select id="sector">
+        <option value="north">Sector North</option>
+        <option value="south">Sector South</option>
+        <option value="east">Sector East</option>
+        <option value="west">Sector West</option>
+      </select>
+
+      <button id="sleep-btn">Sleep Mode</button>
+      <button id="track-btn">Track Mode</button>
+    </div>
+
+    <div id="map-container">
+  <img src="images/map-placeholder.jpg" alt="Map View" />
+</div>
+    
+
+    <div id="log">
+      <h3>Activity Log</h3>
+      <ul>
+        <li>System started...</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // Basic login toggle for demo purposes
+    document.getElementById("login-btn").addEventListener("click", () => {
+      document.getElementById("login-screen").classList.add("hidden");
+      document.getElementById("dashboard").classList.remove("hidden");
+    });
+  </script>
+</body>
+</html>
