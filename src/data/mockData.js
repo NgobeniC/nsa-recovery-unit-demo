@@ -1,28 +1,13 @@
-import CryptoJS from 'crypto-js';
+import { vehicleData } from '../js/gps.js';
 
-     const users = [
-       { username: 'charlesn', passwordHash: CryptoJS.SHA256('SecurePass2025').toString(), role: 'user' },
-       { username: 'clodate', passwordHash: CryptoJS.SHA256('Design123!').toString(), role: 'admin' }
-     ];
+function generateRandomCoordinates() {
+  const lat = vehicleData.lastLocation.lat + (Math.random() - 0.5) * 0.025; // ±0.025 degrees (~2.5-3 km)
+  const lon = vehicleData.lastLocation.lon + (Math.random() - 0.5) * 0.025;
+  // Bounds for South Africa (approx. lat: -22 to -35, lon: 16 to 33)
+  return {
+    lat: Math.max(-35, Math.min(-22, lat)),
+    lon: Math.max(16, Math.min(33, lon))
+  };
+}
 
-     function hashPassword(password) {
-       return CryptoJS.SHA256(password).toString();
-     }
-
-     function validateUser(username, passwordHash) {
-       return users.find(u => u.username === username && u.passwordHash === passwordHash);
-     }
-
-     export const vehicleData = { id: "Car ABC123", battery: 85, lastLocation: { lat: -26.2041, lon: 28.0473 } };
-     export const logEntries = [];
-     export function generateRealisticCoordinates() {
-       const baseLat = vehicleData.lastLocation.lat;
-       const baseLon = vehicleData.lastLocation.lon;
-       const offset = (Math.random() - 0.5) * 0.05; // Approx 5km variation
-       return {
-         lat: baseLat + offset,
-         lon: baseLon + offset,
-         timestamp: new Date().toLocaleString()
-       };
-     }
-     export { hashPassword, validateUser };
+export { generateRandomCoordinates };

@@ -1,35 +1,19 @@
-import { sectorVehicles, vehicleData } from '../data/mockData.js';
-
 function initializeSector() {
-  const sectorSelect = document.getElementById('sector');
-  if (sectorSelect) {
-    // Populate sector dropdown
-    Object.keys(sectorVehicles).forEach(sector => {
-      const option = document.createElement('option');
-      option.value = sector;
-      option.textContent = sector;
-      sectorSelect.appendChild(option);
-    });
+  console.log('Geographical zones initialized');
+  // Initial zone setup if needed
+}
 
-    // Set initial sector
-    sectorSelect.value = vehicleData.sector;
-    updateVehicleInfo();
-
-    // Handle sector change
-    sectorSelect.addEventListener('change', () => {
-      vehicleData.sector = sectorSelect.value;
-      updateVehicleInfo();
-    });
+function updateSector(zone, vehicleData) {
+  console.log('Geographical zone updated to:', zone);
+  const zoneCoords = {
+    pretoria: { lat: -25.7463, lon: 28.1876 },
+    johannesburg: { lat: -26.2041, lon: 28.0473 },
+    capeTown: { lat: -33.9249, lon: 18.4241 },
+    durban: { lat: -29.8587, lon: 31.0218 }
+  };
+  if (zoneCoords[zone]) {
+    vehicleData.lastLocation = zoneCoords[zone];
   }
 }
 
-function updateVehicleInfo() {
-  const vehicleIdElement = document.getElementById('vehicle-id');
-  const recoveryStatusElement = document.getElementById('recovery-status');
-  if (vehicleIdElement && recoveryStatusElement) {
-    vehicleIdElement.textContent = sectorVehicles[vehicleData.sector];
-    recoveryStatusElement.textContent = `Sector: ${vehicleData.sector}, Battery: ${vehicleData.battery}, Last Check-in: ${vehicleData.lastCheckin}`;
-  }
-}
-
-export { initializeSector };
+export { initializeSector, updateSector };

@@ -1,35 +1,33 @@
-  import { validateUser, hashPassword } from '../data/mockData.js';
+let currentSession = null;
 
-     // Simulate session storage with timestamp
-     let currentSession = null;
+function validateUser(username, passwordHash) {
+  const users = [
+    { username: 'charlesn', passwordHash: CryptoJS.SHA256('SecurePass2025').toString(), role: 'Admin' },
+    { username: 'clodate', passwordHash: CryptoJS.SHA256('Design123!').toString(), role: 'Designer' }
+  ];
+  return users.find(u => u.username === username && u.passwordHash === passwordHash) || null;
+}
 
-     function getSession() {
-       if (currentSession && (Date.now() - currentSession.timestamp) < 24 * 60 * 60 * 1000) { // 24-hour session
-         return currentSession;
-       }
-       currentSession = null;
-       return null;
-     }
+function getSession() {
+  return currentSession;
+}
 
-     function validateLogin(username, password) {
-      console.log('Validating:', username, password);
-       if (!username || !password || username.length < 4 || password.length < 8) {
-        console.log('Validation failed: Length check');
-         return { success: false, message: 'Username must be 4+ chars, password 8+ chars' };
-       }
-       const user = validateUser(username, hashPassword(password));
-       console.log('User found:', user);
-       if (user) {
-         currentSession = { username: user.username, role: user.role, timestamp: Date.now() };
-         console.log('Session set:', currentSession);
-         return { success: true, message: `Login successful as ${user.role}, redirecting...`, role: user.role };
-       }
-       console.log('Validation failed: Invalid credentials');
-       return { success: false, message: 'Invalid username or password' };
-     }
+function validateLogin(username, password) {
+  console.log('Validating:', username, password);
+  if (!username || !password || username.length < 4 || password.length < 8) {
+    return { success: false, message: 'Username must be 4+ chars, password 8+ chars' };
+  }
+  const user = validateUser(username, CryptoJS.SHA256(password).toString());
+  console.log('User found:', user);
+  if (user) {
+    currentSession = { username: user.username, role: user.role, timestamp: Date.now() };
+    return { success: true, message: `Login successful as ${user.role}`, role: user.role };
+  }
+  return { success: false, message: 'Invalid username or password' };
+}
 
-     function logout() {
-       currentSession = null;
-     }
+function logout() {
+  currentSession = null;
+}
 
-     export { validateLogin, logout, getSession };
+export { validateLogin, logout, getSession };
