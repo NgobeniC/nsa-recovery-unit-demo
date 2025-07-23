@@ -1,58 +1,25 @@
-import { generateRandomCoordinates, logEntries } from '../data/mockData.js';
+import L from 'leaflet';
 
-let trackingInterval = null;
+const vehicleData = {
+  lastLocation: { lat: -25.7463, lon: 28.1876 } // Pretoria coords
+};
+
+function updateMap(map) {
+  map.setView([vehicleData.lastLocation.lat, vehicleData.lastLocation.lon], 13);
+  L.marker([vehicleData.lastLocation.lat, vehicleData.lastLocation.lon]).addTo(map)
+    .bindPopup('Updated Location').openPopup();
+}
 
 function startSleepMode() {
-  stopTracking(); // Clear any existing interval
-  trackingInterval = setInterval(() => {
-    const coords = generateRandomCoordinates();
-    logEntries.push(coords);
-    updateLog(coords);
-    updateMap(coords);
-  }, 5000); // 5-second check-ins
-  updateStatus('Sleep Mode Active');
+  console.log('Sleep Mode activated');
 }
 
 function startTrackMode() {
-  stopTracking();
-  trackingInterval = setInterval(() => {
-    const coords = generateRandomCoordinates();
-    logEntries.push(coords);
-    updateLog(coords);
-    updateMap(coords);
-  }, 2000); // 2-second updates
-  updateStatus('Track Mode Active');
+  console.log('Track Mode activated');
 }
 
 function stopTracking() {
-  if (trackingInterval) {
-    clearInterval(trackingInterval);
-    trackingInterval = null;
-  }
+  console.log('Tracking stopped');
 }
 
-function updateLog(coords) {
-  const logElement = document.getElementById('log');
-  if (logElement) {
-    const logEntry = `${coords.timestamp}: Lat ${coords.lat}, Lon ${coords.lon}`;
-    logElement.innerHTML += `<div>${logEntry}</div>`;
-    logElement.scrollTop = logElement.scrollHeight; // Auto-scroll to bottom
-  }
-}
-
-function updateMap(coords) {
-  const mapContainer = document.getElementById('map-container');
-  if (mapContainer) {
-    // Placeholder for map update (Clodate will implement Leaflet.js)
-    mapContainer.innerHTML = `Map updated: Lat ${coords.lat}, Lon ${coords.lon}`;
-  }
-}
-
-function updateStatus(message) {
-  const statusElement = document.getElementById('status');
-  if (statusElement) {
-    statusElement.textContent = message;
-  }
-}
-
-export { startSleepMode, startTrackMode, stopTracking };
+export { updateMap, vehicleData, startSleepMode, startTrackMode, stopTracking };

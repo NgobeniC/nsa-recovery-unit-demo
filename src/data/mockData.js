@@ -1,35 +1,13 @@
-// Mock vehicle data 
-const vehicleData = {
-  vehicleId: "ABC123",
-  sector: "Private",
-  lastCheckin: "2025-07-20 12:00 PM", // Matches current date
-  battery: "85%", // Reflects NSA RU’s 24-month battery life
-  status: "Sleep",
-  lastLocation: { lat: 40.7128, lon: -74.0060 } // New York City
-};
+import { vehicleData } from '../js/gps.js';
 
-// Mock log entries 
-const logEntries = [
-  { timestamp: "2025-07-20 11:55 AM", lat: 40.7128, lon: -74.0060 },
-  { timestamp: "2025-07-20 12:00 PM", lat: 40.7130, lon: -74.0058 }
-];
-
-// Generate random GPS coordinates (near Johannesburg for demo)
 function generateRandomCoordinates() {
-  const lat = (-26.2 - Math.random() * 0.1).toFixed(4); // Range: -26.2 to -26.3
-  const lon = (28.0 + Math.random() * 0.1).toFixed(4); // Range: 28.0 to 28.1
-  return { lat, lon, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Africa/Johannesburg' }) };
-
+  const lat = vehicleData.lastLocation.lat + (Math.random() - 0.5) * 0.025; // ±0.025 degrees (~2.5-3 km)
+  const lon = vehicleData.lastLocation.lon + (Math.random() - 0.5) * 0.025;
+  // Bounds for South Africa (approx. lat: -22 to -35, lon: 16 to 33)
+  return {
+    lat: Math.max(-35, Math.min(-22, lat)),
+    lon: Math.max(16, Math.min(33, lon))
+  };
 }
 
-// Sector-specific assets (NSA RU’s use cases)
-const sectorVehicles = {
-  Private: "Car ABC123",
-  Rental: "Rental Car DEF456",
-  Courier: "Delivery Truck GHI789",
-  Construction: "Bulldozer XYZ789",
-  Agriculture: "Tractor JKL012",
-  Transit: "Bus MNO345"
-};
-
-export { vehicleData, logEntries, generateRandomCoordinates, sectorVehicles };
+export { generateRandomCoordinates };

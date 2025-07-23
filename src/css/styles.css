@@ -117,4 +117,8 @@ button:hover {
 .active {
   background: #100b55; /* For active button state */
 }
+#sector {
+  flex: 2; /* Give sector select more space */
+}
+
 

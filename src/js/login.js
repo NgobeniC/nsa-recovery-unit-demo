@@ -1,29 +1,33 @@
-function simulateLogin(username, password) {
-  if (username && password) {
-    console.log("Login successful, redirecting to dashboard...");
-    return true;
-  } else {
-    console.log("Invalid credentials");
-    return false;
-  }
+let currentSession = null;
+
+function validateUser(username, passwordHash) {
+  const users = [
+    { username: 'charlesn', passwordHash: CryptoJS.SHA256('SecurePass2025').toString(), role: 'Admin' },
+    { username: 'clodate', passwordHash: CryptoJS.SHA256('Design123!').toString(), role: 'Designer' }
+  ];
+  return users.find(u => u.username === username && u.passwordHash === passwordHash) || null;
 }
 
-function initializeLogin() {
-  const loginButton = document.getElementById('login-btn');
-  if (loginButton) {
-    loginButton.addEventListener('click', () => {
-      const username = document.getElementById('username')?.value;
-      const password = document.getElementById('password')?.value;
-      if (simulateLogin(username, password)) {
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-      } else {
-        alert("Please enter username and password");
-      }
-    });
-  } else {
-    console.error("Login button not found");
-  }
+function getSession() {
+  return currentSession;
 }
-b
-export { simulateLogin, initializeLogin };
+
+function validateLogin(username, password) {
+  console.log('Validating:', username, password);
+  if (!username || !password || username.length < 4 || password.length < 8) {
+    return { success: false, message: 'Username must be 4+ chars, password 8+ chars' };
+  }
+  const user = validateUser(username, CryptoJS.SHA256(password).toString());
+  console.log('User found:', user);
+  if (user) {
+    currentSession = { username: user.username, role: user.role, timestamp: Date.now() };
+    return { success: true, message: `Login successful as ${user.role}`, role: user.role };
+  }
+  return { success: false, message: 'Invalid username or password' };
+}
+
+function logout() {
+  currentSession = null;
+}
+
+export { validateLogin, logout, getSession };
